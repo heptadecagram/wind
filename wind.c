@@ -30,6 +30,14 @@ void init_map(void)
 	}
 }
 
+void destroy_map(void)
+{
+	for (size_t n=0; n < map.height; ++n) {
+		free(map.glyphs[n]);
+	}
+	free(map.glyphs);
+}
+
 void draw_map(void)
 {
 	for (size_t y=0; y < map.height; ++y) {
@@ -158,6 +166,11 @@ int main(int argc, char *argv[])
 				}
 				break;
 
+			case 12: // CTRL_L
+				clear();
+				draw_map();
+				break;
+
 				// Sufficient buffer for formatting the int 'input'
 				// sizeof(n) = log_256(n) = K
 				// sign + log_10(256) * K + nul
@@ -167,6 +180,10 @@ int main(int argc, char *argv[])
 				mvaddstr(config.max.y-1, 0, buf);
 		}
 	}
+	destroy_map();
 
 	endwin();
+
+	//XXX Uncomment for valgrind tests (will still leak a little from curses)
+	// _nc_free_and_exit(0);
 }
