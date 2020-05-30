@@ -159,7 +159,9 @@ int main(int argc, char *argv[])
 				break;
 
 				// Sufficient buffer for formatting the int 'input'
-				char buf[3*sizeof(input) + 1];
+				// sizeof(n) = log_256(n) = K
+				// sign + log_10(256) * K + nul
+				char buf[1 + 3*sizeof(input) + 1];
 			default:
 				snprintf(buf, sizeof(buf), "%d ", input);
 				mvaddstr(config.max.y-1, 0, buf);
