@@ -107,7 +107,7 @@ int main(int argc, char *argv[])
 	getmaxyx(stdscr, config.max.y, config.max.x);
 	init_map();
 	write_map();
-	cchar_t paintbrush = {0, {' '}, 0};
+	cchar_t paintbrush = {0, {'@'}, 0};
 
 	clear();
 	draw_map();
@@ -136,9 +136,15 @@ int main(int argc, char *argv[])
 			case KEY_SLEFT:
 				paintbrush.chars[0] = next_left(paintbrush.chars[0]);
 				break;
+
 			case KEY_UP:
 				if (player.y > 0 && !map.glyphs[player.y-1][player.x]) {
 					--player.y;
+				}
+				break;
+			case KEY_RIGHT:
+				if (player.x < config.max.x-1 && !map.glyphs[player.y][player.x+1]) {
+					++player.x;
 				}
 				break;
 			case KEY_DOWN:
@@ -151,13 +157,9 @@ int main(int argc, char *argv[])
 					--player.x;
 				}
 				break;
-			case KEY_RIGHT:
-				if (player.x < config.max.x-1 && !map.glyphs[player.y][player.x+1]) {
-					++player.x;
-				}
-				break;
-				// Plenty big for formatting an int
-				char buf[16];
+
+				// Sufficient buffer for formatting the int 'input'
+				char buf[3*sizeof(input) + 1];
 			default:
 				snprintf(buf, sizeof(buf), "%d ", input);
 				mvaddstr(config.max.y-1, 0, buf);
