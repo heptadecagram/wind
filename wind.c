@@ -108,13 +108,18 @@ int main(int argc, char *argv[])
 	nonl();
 	intrflush(stdscr, false);
 	keypad(stdscr, true);
+	start_color();
+
+	for (short n=1; n < 25; ++n) {
+		init_pair(n, n, 0);
+	}
 
 	struct coord player = { 15, 15 };
 	int input = '\0';
 	getmaxyx(stdscr, config.max.y, config.max.x);
 	init_map();
 	write_map();
-	cchar_t paintbrush = {0, {'@'}, 0};
+	cchar_t paintbrush = {WA_BOLD, {'@'}, 1};
 
 	clear();
 	draw_map();
@@ -131,6 +136,11 @@ int main(int argc, char *argv[])
 		}
 
 		switch (input) {
+			case 'b':
+				paintbrush.ext_color++;
+
+				break;
+
 			case 337: // KEY_SUP
 				paintbrush.chars[0] = next_up(paintbrush.chars[0]);
 				break;
@@ -183,6 +193,15 @@ int main(int argc, char *argv[])
 
 	endwin();
 
+	for (short n=0; n < 25; ++n) {
+		short fg, bg;
+		short r, g, b;
+		pair_content(n, &fg, &bg);
+		color_content(fg, &r, &g, &b);
+		printf("%hd: (%hd, %hd, %hd)\n", fg, r, g, b);
+	}
+
+	printf("%d/%d\n", COLORS, COLOR_PAIRS);
 	//XXX Uncomment for valgrind tests (will still leak a little from curses)
 	// _nc_free_and_exit(0);
 }
