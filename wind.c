@@ -3,7 +3,6 @@
 #include <stdlib.h>
 #include <time.h>
 
-#include "log.h"
 #include "walls.h"
 
 struct coord {
