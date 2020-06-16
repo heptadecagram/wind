@@ -17,8 +17,5 @@ else
 wind: LDLIBS += -lncurses
 endif
 
-
-log.o: CFLAGS += -D_DEFAULT_SOURCE
-
 clean:
 	$(RM) *.o
