@@ -5,7 +5,7 @@ CFLAGS += -Waggregate-return -Winline
 
 # Defined for ncursesw
 wind: CPPFLAGS += -D_XOPEN_SOURCE_EXTENDED
-wind: wind.o log.o map.o walls.o
+wind: wind.o map.o walls.o
 
 uname_S := $(shell sh -c 'uname -s 2>/dev/null || echo not')
 
@@ -18,4 +18,4 @@ wind: LDLIBS += -lncurses
 endif
 
 clean:
-	$(RM) *.o
+	$(RM) wind *.o
