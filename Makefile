@@ -1,4 +1,4 @@
-CFLAGS += -std=c17
+CFLAGS += -std=c18
 CFLAGS += -Wall -Wextra -Wpedantic
 CFLAGS += -Wwrite-strings -Wfloat-equal -Wconversion
 CFLAGS += -Waggregate-return -Winline
