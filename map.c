@@ -74,6 +74,28 @@ cchar_t *map_glyph_at(Map *m, int y, int x)
 	return m->glyphs[y][x];
 }
 
+// Will always path along x before y
+static void write_passage(Map *m, int y1, int x1, int y2, int x2)
+{
+	while (x1 != x2) {
+		m->glyphs[y1][x1] = WACS_BULLET;
+		if (x1 < x2) {
+			++x1;
+		} else {
+			--x1;
+		}
+	}
+
+	while (y1 != y2) {
+		m->glyphs[y1][x1] = WACS_BULLET;
+		if (y1 < y2) {
+			++y1;
+		} else {
+			--y1;
+		}
+	}
+}
+
 static void write_room(Map *m, int y, int x, int height, int width)
 {
 	m->glyphs[y][x] = WACS_ULCORNER;
@@ -96,6 +118,7 @@ static void write_room(Map *m, int y, int x, int height, int width)
 
 void map_dig(Map *m)
 {
+	int last_y, last_x;
 
 	for (int n=0; n < 3; ++n) {
 		// 3, from 2 walls separated by at least one walkable middle
@@ -103,9 +126,17 @@ void map_dig(Map *m)
 		int height = 3 + rand() % 10;
 		int width = 3 + rand() % 10;
 
-		int y = rand() % ((int)m->height-height);
-		int x = rand() % ((int)m->width-width);
+		int y = rand() % ((int)m->height - height);
+		int x = rand() % ((int)m->width - width);
 		write_room(m, y, x, height, width);
+		if (n != 0) {
+			int end_y = y + rand() % height;
+			int end_x = x + rand() % width;
+			write_passage(m, last_y, last_x, end_y, end_x);
+		}
+
+		last_y = y + rand() % height;
+		last_x = x + rand() % width;
 	}
 }
 
